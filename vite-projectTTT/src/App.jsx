@@ -2,16 +2,13 @@ import { useState } from "react";
 import Square from "./Square";
 import "./App.css";
 
-export default function Board() {
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
+export default function Board({ xIsNext, squares, onPlay }) {
   function handleClick(i) {
     if (squares[i] || calculateWinner(squares)) {
       return;
     }
 
     if (squares[i]) {
-      console.log("attempting to place piece in existing square");
       return;
     }
     const nextSquares = squares.slice();
@@ -20,8 +17,7 @@ export default function Board() {
     } else {
       nextSquares[i] = "O";
     }
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
+    onPlay(nextSquares);
   }
 
   function calculateWinner(squares) {
@@ -47,10 +43,6 @@ export default function Board() {
       }
     }
     return null;
-  }
-  function resetGame() {
-    setSquares(Array(9).fill(null));
-    setXIsNext(true);
   }
 
   const winner = calculateWinner(squares);
@@ -78,7 +70,6 @@ export default function Board() {
         <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
         <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
       </div>
-      <button onClick={resetGame}>Reset Game</button>
     </>
   );
 }
